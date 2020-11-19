@@ -9,4 +9,5 @@ module.exports = {
     mongo_uri: process.env.MONGO_URI,
     google_secret: process.env.GOOGLE_SECRET,
     google_id: process.env.GOOGLE_ID,
+    cookie_key: process.env.KEYS,
 };

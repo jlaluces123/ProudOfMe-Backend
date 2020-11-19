@@ -6,7 +6,7 @@
     "author": "<jlalucescareer123@gmail.com>",
     "license": "MIT",
     "scripts": {
-        "start": "nodemon server.js"
+        "dev": "nodemon server.js"
     },
     "devDependencies": {
         "nodemon": "^2.0.6"
