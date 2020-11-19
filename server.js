@@ -3,7 +3,11 @@ const bodyParser = require('body-parser');
 const cookieSessions = require('cookie-session');
 const passport = require('passport');
 const passportConfig = require('./config/passport');
-const { authRouter, profileRouter } = require('./api/routes/index');
+const {
+    authRouter,
+    profileRouter,
+    usersRouter,
+} = require('./api/routes/index');
 const cors = require('cors');
 const config = require('./config/index');
 const mongoose = require('mongoose');
@@ -25,8 +29,10 @@ app.use(passport.session());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
 app.use('/api/auth/', authRouter);
 app.use('/api/user/', profileRouter);
+app.use('/api/users/', usersRouter);
 
 // Connect to MongoDB
 mongoose.connect(
