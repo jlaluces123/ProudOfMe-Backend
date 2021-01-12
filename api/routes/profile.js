@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const User = require('../../models/User');
+const Moment = require('../../models/Moment');
+const mongoose = require('mongoose');
 
 router.get('/:userId', async (req, res) => {
     console.log('GET /id');
@@ -39,6 +41,57 @@ router.post('/:userId/mantra', async (req, res) => {
         (err, result) => {
             if (err) throw err;
             console.log(result);
+        }
+    );
+});
+
+/*
+POST / CREATE - A Moment
+
+! Current issue: casting userId from string to ObjectId
+
+1. Gathers userId (req.params)
+2. Gathers title and story (req.body)
+3. Creates a Moment
+*/
+router.post('/:userId/moments', (req, res) => {
+    console.log('POST /id/moments');
+    let userId = req.params.userId;
+    let title = req.body.title;
+    let story = req.body.story;
+
+    User.find({ googleId: userId }, (err, user) => {
+        if (err) return res.status(404).json(err);
+        console.log('USER: ', user[0]._id);
+
+        let moment = new Moment({
+            _id: mongoose.Types.ObjectId(),
+            userId: user[0]._id,
+            title,
+            story,
+        });
+
+        moment
+            .save()
+            .then((data) => res.json(201).json(data))
+            .catch((err) => res.status(400).json(err));
+    });
+});
+
+/*
+    GET - All Moments
+1. Finds all Moment documents that have the userId attached to it
+2. Returns all Moment documents back to client
+*/
+router.get('/:userId/moments', (req, res) => {
+    console.log('GET /id/moments');
+    let userId = req.params.userId;
+
+    Moment.findById(
+        { userId: mongoose.Types.ObjectId(userId.toString()) },
+        (err, result) => {
+            if (err) return res.status(400).json(err);
+            console.log('Moment Found: ', userId + result);
         }
     );
 });

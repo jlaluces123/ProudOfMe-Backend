@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const User = require('../models/User');
 
 const MomentSchema = new mongoose.Schema(
     {
@@ -6,7 +7,10 @@ const MomentSchema = new mongoose.Schema(
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
+            required: true,
         },
+        title: { type: String, required: true },
+        story: { type: String, required: true },
     },
     { timestamps: true }
 );
