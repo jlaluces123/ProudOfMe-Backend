@@ -2,7 +2,6 @@ const router = require('express').Router();
 const User = require('../../models/User');
 const Moment = require('../../models/Moment');
 const mongoose = require('mongoose');
-const ObjectId = require('mongoose').Types.ObjectId;
 
 router.get('/:userId', async (req, res) => {
     console.log('GET /id');
@@ -10,10 +9,10 @@ router.get('/:userId', async (req, res) => {
     await User.findOne({ googleId: userId }, (err, user) => {
         if (err) {
             console.log('ERROR GET /id', err);
-            res.status(400).json({ error: 'ERROR GETTING USER' });
+            return res.status(400).json({ error: 'ERROR GETTING USER' });
         }
         console.log('User found, returning: ', user._id);
-        res.status(200).json({ user });
+        return res.status(200).json({ user });
     });
 });
 
