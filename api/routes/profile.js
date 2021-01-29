@@ -80,20 +80,20 @@ router.post('/:userId/moments', (req, res) => {
 
 /*
     GET - All Moments
-1. Finds all Moment documents that have the userId attached to it
-2. Returns all Moment documents back to client
+
+    ! Current Issue: argument passed in must be 12 bytes or a string of 24 hex chars
+    
+    1. Finds all Moment documents that have the userId attached to it
+    2. Returns all Moment documents back to client
 */
 router.get('/:userId/moments', (req, res) => {
     console.log('GET /id/moments');
     let userId = req.params.userId;
 
-    Moment.findById(
-        { userId: mongoose.Types.ObjectId(userId.toString()) },
-        (err, result) => {
-            if (err) return res.status(400).json(err);
-            console.log('Moment Found: ', userId + result);
-        }
-    );
+    Moment.findById({ userId: userId }, (err, result) => {
+        if (err) return res.status(400).json(err);
+        console.log('Moment Found: ', userId + result);
+    });
 });
 
 module.exports = router;
