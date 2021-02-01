@@ -59,6 +59,7 @@ router.post('/:userId/moments', (req, res) => {
     let userId = req.params.userId;
     let title = req.body.title;
     let story = req.body.story;
+    let public = req.body.public;
 
     User.find({ googleId: userId }, (err, user) => {
         if (err) return res.status(404).json(err);
@@ -70,6 +71,7 @@ router.post('/:userId/moments', (req, res) => {
             userId: user[0]._id,
             title,
             story,
+            public,
         });
 
         moment
