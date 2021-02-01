@@ -11,6 +11,7 @@ const {
 const cors = require('cors');
 const config = require('./config/index');
 const mongoose = require('mongoose');
+const Moment = require('./models/Moment');
 
 const app = express();
 
@@ -56,7 +57,16 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/', (req, res) => res.send('SANITY Check: good'));
+app.get('/', (req, res) => {
+    // This function is used to update any old schemas if we add more properties in the future
+    // async function addPublicField() {
+    //     console.log('Updating old schemas to public: false...');
+    //     await Moment.updateMany({}, { $set: { public: false } });
+    // }
+
+    // addPublicField();
+    res.send('SANITY Check: good');
+});
 
 app.listen(config.port, (err) => {
     if (err) {
