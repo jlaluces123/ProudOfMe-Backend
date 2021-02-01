@@ -11,7 +11,7 @@ router.get('/:userId', async (req, res) => {
             console.log('ERROR GET /id', err);
             return res.status(400).json({ error: 'ERROR GETTING USER' });
         }
-        console.log('User found, returning: ', user._id);
+        console.log('User found, returning: ', user);
         return res.status(200).json({ user });
     });
 });
