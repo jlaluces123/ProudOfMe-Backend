@@ -24,12 +24,12 @@ passport.use(
                     console.log('User already exists', profile);
                     done(null, user);
                 } else {
-                    console.log('New User being created...');
+                    console.log('New User being created...', profile);
                     new User({
                         _id: mongoose.Types.ObjectId(),
                         googleId: profile.id,
                         username: profile.displayName,
-                        photo: profile.photos[0],
+                        photo: profile.photos[0].value,
                     })
                         .save()
                         .then((newUser) => done(null, newUser));
