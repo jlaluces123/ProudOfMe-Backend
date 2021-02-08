@@ -29,7 +29,7 @@ passport.use(
                         _id: mongoose.Types.ObjectId(),
                         googleId: profile.id,
                         username: profile.displayName,
-                        photos: profile.photos[0],
+                        photo: profile.photos[0],
                     })
                         .save()
                         .then((newUser) => done(null, newUser));
