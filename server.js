@@ -61,7 +61,7 @@ app.get('/', (req, res) => {
     // This function is used to update any old schemas if we add more properties in the future
     async function addNewField() {
         console.log('Updating old schemas to likes: 0...');
-        await Moment.updateMany({ public: true }, { $set: { likes: 0 } });
+        await Moment.updateMany({}, { $set: { likes: 0, usersWhoLiked: [] } });
     }
 
     addNewField();

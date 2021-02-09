@@ -13,6 +13,7 @@ const MomentSchema = new mongoose.Schema(
         story: { type: String, required: true },
         public: { type: Boolean, required: true },
         likes: { type: Number },
+        usersWhoLiked: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     },
     { timestamps: true }
 );
