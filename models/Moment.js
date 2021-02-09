@@ -12,6 +12,8 @@ const MomentSchema = new mongoose.Schema(
         title: { type: String, required: true },
         story: { type: String, required: true },
         public: { type: Boolean, required: true },
+        likes: { type: Number },
+        usersWhoLiked: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     },
     { timestamps: true }
 );

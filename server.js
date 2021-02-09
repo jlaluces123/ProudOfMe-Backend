@@ -7,6 +7,7 @@ const {
     authRouter,
     profileRouter,
     usersRouter,
+    momentRouter,
 } = require('./api/routes/index');
 const cors = require('cors');
 const config = require('./config/index');
@@ -34,6 +35,7 @@ app.use(bodyParser.json());
 app.use('/api/auth/', authRouter);
 app.use('/api/user/', profileRouter);
 app.use('/api/users/', usersRouter);
+app.use('/api/moments/', momentRouter);
 
 // Connect to MongoDB
 mongoose.connect(
@@ -59,12 +61,12 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res) => {
     // This function is used to update any old schemas if we add more properties in the future
-    // async function addPublicField() {
-    //     console.log('Updating old schemas to public: false...');
-    //     await Moment.updateMany({}, { $set: { public: false } });
+    // async function addNewField() {
+    //     console.log('Updating old schemas to likes: 0...');
+    //     await Moment.updateMany({}, { $set: { likes: 0, usersWhoLiked: [] } });
     // }
 
-    // addPublicField();
+    // addNewField();
     res.send('SANITY Check: good');
 });
 
