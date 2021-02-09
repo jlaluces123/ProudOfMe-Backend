@@ -7,6 +7,7 @@ const {
     authRouter,
     profileRouter,
     usersRouter,
+    momentRouter,
 } = require('./api/routes/index');
 const cors = require('cors');
 const config = require('./config/index');
@@ -34,6 +35,7 @@ app.use(bodyParser.json());
 app.use('/api/auth/', authRouter);
 app.use('/api/user/', profileRouter);
 app.use('/api/users/', usersRouter);
+app.use('/api/moments/', momentRouter);
 
 // Connect to MongoDB
 mongoose.connect(

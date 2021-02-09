@@ -7,6 +7,15 @@ const mongoose = require('mongoose');
     API URL: /api/moments/...
 */
 
+router.get('/:momentId', async (req, res) => {
+    let momentId = req.params.momentId;
+
+    Moment.findOne({ _id: momentId }, (err, moment) => {
+        if (err) return res.status(400).json({ fetchMoment: err });
+        return res.status(200).json({ moment });
+    });
+});
+
 /*
     POST (Likes)
     - This function will be called when users click the
@@ -25,37 +34,53 @@ const mongoose = require('mongoose');
 
 */
 router.post('/:momentId/likes', async (req, res) => {
+    console.log('POST Moments');
     let momentId = req.params.momentId;
     let userId = req.body.userId;
     let action = req.body.action;
 
     if (action == 'like') {
+        console.log('User is adding like');
         Moment.findOneAndUpdate(
             { _id: momentId },
             {
                 $inc: { likes: 1 },
-                $push: { usersWhoLiked: userId },
-                function(err, success) {
-                    if (err)
-                        return res.status(400).json({ addLikesError: err });
-                    if (success) return res.status(200).json({ success });
-                },
+                $addToSet: { usersWhoLiked: userId },
+            },
+            { useFindAndModify: false },
+            function (err, success) {
+                if (err) {
+                    console.error(err);
+                    return res.status(400).json({ addLikesError: err });
+                } else {
+                    console.log(success);
+                    return res.status(201).json({ addLikesSuccess: success });
+                }
             }
         );
     } else if (action == 'unlike') {
+        console.log('User is removing like');
         Moment.findOneAndUpdate(
             { _id: momentId },
             {
                 $inc: { likes: -1 },
                 $pull: { usersWhoLiked: userId },
-                function(err, success) {
-                    if (err)
-                        return res.status(400).json({ removeLikesError: err });
-                    if (success) return res.status(200).json({ success });
-                },
+            },
+            { useFindAndModify: false },
+            function (err, success) {
+                if (err) {
+                    console.error(err);
+                    return res.status(400).json({ removeLikesError: err });
+                } else {
+                    console.log(success);
+                    return res
+                        .status(201)
+                        .json({ removeLIkesSuccess: success });
+                }
             }
         );
     } else {
+        console.log('No action found');
         return res.status(400).json('No Action Found: please supply one');
     }
 });
