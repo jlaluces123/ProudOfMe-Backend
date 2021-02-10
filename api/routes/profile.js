@@ -72,6 +72,8 @@ router.post('/:userId/moments', (req, res) => {
             title,
             story,
             public,
+            likes: 0,
+            usersWhoLiked: [],
         });
 
         moment
