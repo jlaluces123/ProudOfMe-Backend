@@ -33,56 +33,76 @@ router.get('/:momentId', async (req, res) => {
         4. Returns status corresponding to result
 
 */
+
 router.post('/:momentId/likes', async (req, res) => {
     console.log('POST Moments');
     let momentId = req.params.momentId;
     let userId = req.body.userId;
     let action = req.body.action;
 
-    if (action == 'like') {
-        console.log('User is adding like');
-        Moment.findOneAndUpdate(
-            { _id: momentId },
-            {
-                $inc: { likes: 1 },
-                $addToSet: { usersWhoLiked: userId },
-            },
-            { useFindAndModify: false },
-            function (err, success) {
-                if (err) {
-                    console.error(err);
-                    return res.status(400).json({ addLikesError: err });
-                } else {
-                    console.log(success);
-                    return res.status(201).json({ addLikesSuccess: success });
+    Moment.findOne({ _id: momentId }, (err, moment) => {
+        if (err) return res.status(400).json({ checkIfUserLikedError: err });
+
+        // If user is trying to like somehow even though they already liked:
+        if (
+            action == 'like' &&
+            moment.usersWhoLiked.includes(userId) === true
+        ) {
+            console.log('User already in liked arr');
+            return res
+                .status(304)
+                .json({ checkIfUserLiked: 'Found User already' });
+
+            // User didn't like already and is liking the post
+        } else if (action == 'like') {
+            console.log('User is adding like');
+            Moment.findOneAndUpdate(
+                { _id: momentId },
+                {
+                    $inc: { likes: 1 },
+                    $addToSet: { usersWhoLiked: userId },
+                },
+                { useFindAndModify: false, new: true },
+                function (err, success) {
+                    if (err) {
+                        console.error(err);
+                        return res.status(400).json({ addLikesError: err });
+                    } else {
+                        console.log(success);
+                        return res
+                            .status(201)
+                            .json({ addLikesSuccess: success });
+                    }
                 }
-            }
-        );
-    } else if (action == 'unlike') {
-        console.log('User is removing like');
-        Moment.findOneAndUpdate(
-            { _id: momentId },
-            {
-                $inc: { likes: -1 },
-                $pull: { usersWhoLiked: userId },
-            },
-            { useFindAndModify: false },
-            function (err, success) {
-                if (err) {
-                    console.error(err);
-                    return res.status(400).json({ removeLikesError: err });
-                } else {
-                    console.log(success);
-                    return res
-                        .status(201)
-                        .json({ removeLIkesSuccess: success });
+            );
+
+            // User is unliking
+        } else if (action == 'unlike') {
+            console.log('User is removing like');
+            Moment.findOneAndUpdate(
+                { _id: momentId },
+                {
+                    $inc: { likes: -1 },
+                    $pull: { usersWhoLiked: userId },
+                },
+                { useFindAndModify: false, new: true },
+                function (err, success) {
+                    if (err) {
+                        console.error(err);
+                        return res.status(400).json({ removeLikesError: err });
+                    } else {
+                        console.log(success);
+                        return res
+                            .status(201)
+                            .json({ removeLIkesSuccess: success });
+                    }
                 }
-            }
-        );
-    } else {
-        console.log('No action found');
-        return res.status(400).json('No Action Found: please supply one');
-    }
+            );
+        } else {
+            console.log('No action found');
+            return res.status(400).json('No Action Found: please supply one');
+        }
+    });
 });
 
 module.exports = router;
