@@ -3,7 +3,7 @@ const User = require('../../models/User');
 const Moment = require('../../models/Moment');
 /* 
 
-    URL: /api/user/...
+    URL: /api/users/...
 
 */
 
@@ -18,11 +18,21 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/find/:userId', async (req, res) => {
+    console.log('Finding user...');
     const userId = req.params.userId;
-    User.findOne({ _id: userId }, (err, user) => {
-        if (err) return res.status(404).json(err);
-        return res.status(200).json(user);
-    });
+    const idType = req.body.type;
+
+    if (idType === 'google') {
+        User.findOne({ googleId: userId }, (err, user) => {
+            if (err) return res.status(404).json(err);
+            return res.status(200).json(user);
+        });
+    } else {
+        User.findOne({ _id: userId }, (err, user) => {
+            if (err) return res.status(404).json(err);
+            return res.status(200).json(user);
+        });
+    }
 });
 
 router.get('/feed', async (req, res) => {
