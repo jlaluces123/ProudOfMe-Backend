@@ -8,12 +8,12 @@ const mongoose = require('mongoose');
 */
 
 router.get('/:userId', async (req, res) => {
-    console.log('GET /id');
     let userId = req.params.userId;
     await User.findOne({ googleId: userId }, (err, user) => {
         if (err) {
-            console.log('ERROR GET /id', err);
-            return res.status(400).json({ findUserErr: 'ERROR GETTING USER' });
+            return res
+                .status(400)
+                .json({ findUserErr: 'ERROR GETTING USER', err });
         }
         user === null
             ? res.status(404).json({ findUserErr: 'User NULL' })
