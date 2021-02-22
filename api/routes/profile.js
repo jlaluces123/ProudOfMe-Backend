@@ -3,16 +3,21 @@ const User = require('../../models/User');
 const Moment = require('../../models/Moment');
 const mongoose = require('mongoose');
 
+/* 
+    API URL: /api/user/...
+*/
+
 router.get('/:userId', async (req, res) => {
     console.log('GET /id');
     let userId = req.params.userId;
     await User.findOne({ googleId: userId }, (err, user) => {
         if (err) {
             console.log('ERROR GET /id', err);
-            return res.status(400).json({ error: 'ERROR GETTING USER' });
+            return res.status(400).json({ findUserErr: 'ERROR GETTING USER' });
         }
-        console.log('User found, returning: ', user);
-        return res.status(200).json({ user });
+        user === null
+            ? res.status(404).json({ findUserErr: 'User NULL' })
+            : res.status(200).json({ userFound: user });
     });
 });
 
