@@ -62,7 +62,7 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     // This function is used to update any old schemas if we add more properties in the future
     // async function addNewField() {
-    //     console.log('Updating old schemas to likes: 0...');
+    //     console.log('Updating old schemas...');
     //     await Moment.updateMany({}, { $set: { likes: 0, usersWhoLiked: [] } });
     // }
 

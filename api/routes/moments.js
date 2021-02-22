@@ -11,7 +11,7 @@ router.get('/:momentId', async (req, res) => {
     let momentId = req.params.momentId;
 
     Moment.findOne({ _id: momentId }, (err, moment) => {
-        if (err) return res.status(400).json({ fetchMoment: err });
+        if (err) return res.status(400).json({ fetchMomentErr: err });
         return res.status(200).json({ moment });
     });
 });
