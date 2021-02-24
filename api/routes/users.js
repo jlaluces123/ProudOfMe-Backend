@@ -18,12 +18,17 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/find/:userId', async (req, res) => {
-    console.log('Finding user...');
+    console.log('Fetching user profile and public posts...');
     const userId = req.params.userId;
 
     User.findOne({ _id: userId }, (err, user) => {
         if (err) return res.status(404).json(err);
-        return res.status(200).json(user);
+        Moment.find({ userId, public: true }, (momentErr, moments) => {
+            if (momentErr) {
+                return res.status(400).json({ findUserErr: momentErr });
+            }
+            return res.status(200).json({ user, publicMoments: moments });
+        });
     });
 });
 
