@@ -9,6 +9,15 @@ const mongoose = require('mongoose');
 
 router.get('/:userId', async (req, res) => {
     let userId = req.params.userId;
+
+    await User.findOne({ _id: userId }, (err, user) => {
+        if (err) return res.status(400).json({ findUserErr: err });
+        return res.status(200).json({ userFound: user });
+    });
+});
+
+router.get('/:userId/google', async (req, res) => {
+    let userId = req.params.userId;
     await User.findOne({ googleId: userId }, (err, user) => {
         if (err) {
             return res
