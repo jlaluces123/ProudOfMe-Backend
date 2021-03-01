@@ -109,13 +109,13 @@ router.get('/:userId/moments', (req, res) => {
     console.log('GET /id/moments');
     let userId = req.params.userId;
 
-    User.findOne({ googleId: userId }, (err, user) => {
+    User.findOne({ _id: userId }, (err, user) => {
         if (err) {
             console.log('Could not find user | GET Moments:', err);
             return res.status(400).json(err);
         }
 
-        Moment.find({ userId: String(user._id) }, (err, moments) => {
+        Moment.find({ userId: user._id }, (err, moments) => {
             if (err) {
                 console.log(
                     'Could not find moments | GET Moments findById: ',
